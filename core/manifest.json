@@ -25,6 +25,6 @@
     "db_host": "localhost",
     "db_user": "root",
     "db_pass": "",
-    "db_name": "insta_db"
+    "db_name": "project_db"
   }
 }
