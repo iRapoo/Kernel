@@ -10,7 +10,8 @@ class Generate
      * $max - set maximum length after prefix
      * */
 
-    function genRandomString($chars,$max){
+    function genRandomString($chars = false,
+                             $max = false, $qx = true){
         $chars=(!$chars)?"1234567890qazxswedcvfrtgbnhyujmkiolp":$chars;
         $max=(!$max)?10:$max;
         $size=StrLen($chars)-1;
@@ -19,7 +20,49 @@ class Generate
         while($max--)
             $name.= $chars[rand(0,$size)];
 
-        return "qx_".$name;
+        return ($qx) ? "qx_".$name : $name;
+    }
+
+    function setHideKey($string){
+        $string = self::convertIntToString($string);
+        $c_string = strlen($string);
+        $g_string = self::genRandomString("AbcDEfGopZ", 11, false);
+
+        for($i = 0; $i < $c_string; $i++)
+            $g_string[$i*2] = $string[$i];
+
+        if($c_string>6)
+            $g_string = $string;
+
+        return $g_string;
+    }
+
+    function getHideKey($string){
+        $string = self::convertStringToInt($string);
+
+        return preg_replace('/[^0-9]/', '', $string);
+    }
+
+    function convertIntToString($int){
+        $converter = array(
+            '1' => 'a', '2' => 'B', '3' => 'C',
+            '4' => 'd', '5' => 'e', '6' => 'F',
+            '7' => 'g', '8' => 'O', '9' => 'P',
+            '0' => 'z'
+        );
+
+        return strtr($int, $converter);
+    }
+
+    function convertStringToInt($string){
+        $converter = array(
+            'a' => '1', 'B' => '2', 'C' => '3',
+            'd' => '4', 'e' => '5', 'F' => '6',
+            'g' => '7', 'O' => '8', 'P' => '9',
+            'z' => '0'
+        );
+
+        return strtr($string, $converter);
     }
 
     /*
@@ -39,7 +82,7 @@ class Generate
             'с' => 's',   'т' => 't',   'у' => 'u',
             'ф' => 'f',   'х' => 'h',   'ц' => 'c',
             'ч' => 'ch',  'ш' => 'sh',  'щ' => 'sch',
-            'ь' => '\'',  'ы' => 'y',   'ъ' => '\'',
+            'ь' => 'i',  'ы' => 'y',   'ъ' => 'i',
             'э' => 'e',   'ю' => 'yu',  'я' => 'ya',
 
             ' ' => '_', '—' => '-', '–' => '-',
@@ -53,7 +96,7 @@ class Generate
             'С' => 'S',   'Т' => 'T',   'У' => 'U',
             'Ф' => 'F',   'Х' => 'H',   'Ц' => 'C',
             'Ч' => 'Ch',  'Ш' => 'Sh',  'Щ' => 'Sch',
-            'Ь' => '\'',  'Ы' => 'Y',   'Ъ' => '\'',
+            'Ь' => 'i',  'Ы' => 'Y',   'Ъ' => 'i',
             'Э' => 'E',   'Ю' => 'Yu',  'Я' => 'Ya',
 
             //Укр алфавит
@@ -64,7 +107,7 @@ class Generate
     }
 
     /*
-     * method @str@url
+     * method @str2url
      *
      * $str - set string to convert
      * */
