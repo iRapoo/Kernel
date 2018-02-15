@@ -124,4 +124,42 @@ class Generate
         return $str;
     }
 
+    function YATranslate ($string, $lang1, $lang2, $enabled){
+        $str = str_replace(' ', '+', $string);
+
+        $lang = ($lang2) ? 'lang='.$lang1.'-'.$lang2.'&' : 'lang='.$lang1.'&';
+
+        $url = 'https://translate.yandex.net/api/v1.5/tr.json/translate?' .
+            'key=trnsl.1.1.20170604T110559Z.0af74b8a7abfab2e.6a5c71a11fde0919fec1274f72200ce41372be05&' .
+            'text='.$str.'&' .
+            'lang='.$lang1.'-'.$lang2.'&' .
+            'format=plain&' .
+            'options=1';
+
+        $curlObject = curl_init();
+
+        curl_setopt($curlObject, CURLOPT_URL, $url);
+
+        curl_setopt($curlObject, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curlObject, CURLOPT_SSL_VERIFYHOST, false);
+
+        curl_setopt($curlObject, CURLOPT_RETURNTRANSFER, true);
+
+        $responseData = curl_exec($curlObject);
+
+        curl_close($curlObject);
+
+        if ($responseData === false) {
+            throw new Exception('Response false');
+        }
+
+        if ($responseData AND $enabled) {
+            $array = json_decode($responseData, true);
+            $text = $array['text'][0];
+        } else {
+            $text = $string;
+        }
+        return $text;
+    }
+
 }

@@ -33,7 +33,7 @@ class Manifest{
 
 	function _getJQ($key){
 
-		$jq = ["jquery-1.12.3.min.js","jquery-2.2.3.min.js","jquery-3.2.1.min.js"]; //JQuery versions
+		$jq = ["jquery-1.12.3.min.js","jquery-2.2.3.min.js","jquery-3.3.1.min.js"]; //JQuery versions
 
 		return $jq[$key];
 	}
